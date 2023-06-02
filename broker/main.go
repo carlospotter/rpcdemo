@@ -6,6 +6,8 @@ import (
 	"io"
 	"net"
 	"net/http"
+	"net/rpc"
+	"time"
 )
 
 func main() {
@@ -45,11 +47,31 @@ func root(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "http server up \n")
 }
 
-func rpcFunc(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
+type RPCPayload struct{
+	Name string
+	Data string
+}
 
-	fmt.Printf("%s: got /rpc request\n", ctx.Value("serverAddr"))
-	io.WriteString(w, "http server up: route rpc\n")
+func rpcFunc(w http.ResponseWriter, r *http.Request) {
+	client, err := rpc.Dial("tcp", "localhost:5001")
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
+	rpcPayload := RPCPayload{
+		Name: "RPC Info",
+		Data: time.Now().String(),
+	}
+
+	var rpcResult string
+	err = client.Call("RPCServer.LogInfo", rpcPayload, &rpcResult) 
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
+	io.WriteString(w, rpcResult + "\n")
 }
 
 func grpcFunc(w http.ResponseWriter, r *http.Request) {
@@ -58,3 +80,4 @@ func grpcFunc(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("%s: got /grpc request\n", ctx.Value("serverAddr"))
 	io.WriteString(w, "http server up: route grpc\n")
 }
+
