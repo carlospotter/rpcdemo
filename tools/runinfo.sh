@@ -1,3 +1,3 @@
 #!/bin/bash
 
-go run ../info/main.go
+go run ../info/*.go

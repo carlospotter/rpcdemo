@@ -8,6 +8,11 @@ import (
 	"net/http"
 	"net/rpc"
 	"time"
+
+	"github.com/carlospotter/rpcdemo/broker/infos"
+
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 func main() {
@@ -75,9 +80,30 @@ func rpcFunc(w http.ResponseWriter, r *http.Request) {
 }
 
 func grpcFunc(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
+	connection, err := grpc.Dial("localhost:5002", grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
 
-	fmt.Printf("%s: got /grpc request\n", ctx.Value("serverAddr"))
-	io.WriteString(w, "http server up: route grpc\n")
+	defer connection.Close()
+
+	client := infos.NewInfosClient(connection)
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	
+	grpcResult, err := client.LogInfo(ctx, &infos.InfoRequest{
+		Info: &infos.Info{
+			Name: "gRPC Info",
+			Data: time.Now().String(),
+		},
+	})
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
+	io.WriteString(w, grpcResult.Result + "\n")
 }
 

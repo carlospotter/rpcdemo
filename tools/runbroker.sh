@@ -1,3 +1,3 @@
 #!/bin/bash
 
-go run ../broker/main.go
+go run ../broker/*.go

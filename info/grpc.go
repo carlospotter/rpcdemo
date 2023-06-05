@@ -3,9 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
-	"info/infos"
 	"log"
 	"net"
+
+	"github.com/carlospotter/rpcdemo/info/infos"
 
 	"google.golang.org/grpc"
 )

@@ -1,4 +1,4 @@
-module info
+module github.com/carlospotter/rpcdemo
 
 go 1.19
 
