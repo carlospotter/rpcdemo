@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package infos;
+
+option go_package = "/infos";
+
+message Info{
+    string name = 1;
+    string data = 2;
+}
+
+message InfoRequest {
+    Info info = 1;
+}
+
+message InfoResponse {
+    string result = 1;
+}
+
+service Infos {
+    rpc LogInfo(InfoRequest) returns (InfoResponse);
+}

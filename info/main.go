@@ -9,6 +9,7 @@ import (
 )
 
 const rpcPort = "5001"
+const grpcPort = "5002"
 
 func main() {
 	ctx := context.Background()
@@ -21,10 +22,12 @@ func main() {
 	
 	go rpcListen()
 
+	go grpcListen()
+
 	<-ctx.Done()
 }
 
-func rpcListen() error {
+func rpcListen() {
 	listen, err := net.Listen("tcp", fmt.Sprintf("0.0.0.0:%s", rpcPort))
 	if err != nil {
 		log.Println(err)
