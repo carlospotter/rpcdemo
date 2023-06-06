@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>RPC demo</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <div style="max-width: 800px; word-wrap: break-word; margin:auto" id="renderedOutput"></div>
+  
+  <script>
+    fetch('./README.md')
+      .then(response => response.text())
+      .then(markdownText => {
+        const renderedHtml = marked.parse(markdownText);
+
+        const renderedOutput = document.getElementById('renderedOutput');
+        renderedOutput.innerHTML = renderedHtml;
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  </script>
+</body>
+</html>
