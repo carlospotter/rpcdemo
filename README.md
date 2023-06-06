@@ -13,3 +13,21 @@ Golang permite a criação de um cliente e um servidor RPC utilizando a bibliote
 gRPC (Google Remote Procedure Call) é um framework RPC desenvolvido pelo Google. Além de vantagens de performance, ele também possui suporte para múltiplas linguagens, permitindo que o client e o server sejam desenvolvidos utilizando linguagens de programação distintas.
 
 Para isso, o protocolo deve ser definido em um arquivo `.proto`, onde são definidas as propriedades da request, response, métodos expostos pelo protocolo. Utilizando [ferramentas específicas](https://grpc.io/), esse arquivo `.proto` é compilado e o código para exposição dos métodos e criação de structs é gerado automaticamente, faltando apenas a criação do client e do server utilizando o package [grpc](https://pkg.go.dev/google.golang.org/grpc).
+
+## RPC vs REST
+
+### Vantagens
+
+1. Comunicação por contratos com tipagem, garantindo que cliente e servidor utilizem estruturas de dados bem definidas, reduzindo chances de incompatibilidade ou erros de interpretação;
+
+2. Eficiência na serialização/desserialização em comparação com `json`;
+
+3. Performance e eficiência, com menor latência na comunicação.
+
+### Desvantagens
+
+1. Maior complexidade e curva de aprendizado, uma vez que o uso de REST é mais simples de implementar e mais difundido;
+
+2. Interoperabilidade limitada, exigindo o uso de linguagens iguais para client/server, ou uso de frameworks que também tem limitação de linguagens suportadas;
+
+3. Exige maior documentação ou convenções de usos dos métodos, enquanto REST pode oferecer mais flexibilidade e ser mais descritivo utilizando endpoints e métodos HTTP específicos.
